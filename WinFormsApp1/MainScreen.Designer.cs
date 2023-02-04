@@ -31,7 +31,6 @@
             this.startButton = new System.Windows.Forms.Button();
             this.titleLabel = new System.Windows.Forms.Label();
             this.backButton = new System.Windows.Forms.Button();
-            this.board = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
             // startButton
@@ -64,14 +63,6 @@
             this.backButton.UseVisualStyleBackColor = true;
             this.backButton.Click += new System.EventHandler(this.backButton_Click);
             // 
-            // board
-            // 
-            this.board.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.board.Location = new System.Drawing.Point(357, 212);
-            this.board.Name = "board";
-            this.board.Size = new System.Drawing.Size(300, 300);
-            this.board.TabIndex = 3;
-            // 
             // TicTacToe
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -80,7 +71,6 @@
             this.BackgroundImage = global::WinFormsApp1.Resources.Shrek_transparent;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(818, 652);
-            this.Controls.Add(this.board);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.startButton);
@@ -98,6 +88,5 @@
         private Button startButton;
         private Label titleLabel;
         private Button backButton;
-        private FlowLayoutPanel board;
     }
 }
