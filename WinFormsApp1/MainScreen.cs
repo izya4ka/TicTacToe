@@ -12,16 +12,19 @@ namespace WinFormsApp1
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            BackgroundImage = null;
+            BackgroundImage = Resources.fon2;
             startButton.Hide();
             titleLabel.Hide();
             backButton.Show();
             board.ShowAll();
+            clearButton.Show();
         }
+
         private void TicTacToe_Load(object sender, EventArgs e)
         {
             backButton.Hide();
-            foreach(Cell cell in board.board)
+            clearButton.Hide();
+            foreach (Cell cell in board.board)
             {
                 Controls.Add(cell);
                 cell.Hide();
@@ -34,8 +37,13 @@ namespace WinFormsApp1
             startButton.Show();
             titleLabel.Show();
             backButton.Hide();
+            clearButton.Hide();
             board.HideAll();
+        }
 
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            board.ClearBoard();
         }
     }
 }

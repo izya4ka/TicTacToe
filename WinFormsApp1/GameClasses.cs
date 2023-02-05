@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WinFormsApp1
+﻿namespace WinFormsApp1
 {
     internal class Cell : Button
     {
@@ -16,14 +14,14 @@ namespace WinFormsApp1
 
         private States state = States.None;
 
-
         public States GetState() => state;
 
         public void SetState(States receivedState)
         {
             state = receivedState;
 
-            switch (receivedState) {
+            switch (receivedState)
+            {
                 case States.None:
                     Text = " ";
                     break;
@@ -45,13 +43,14 @@ namespace WinFormsApp1
             { new Cell(), new Cell(), new Cell() },
             { new Cell(), new Cell(), new Cell() }
         };
-        
+
         private void DoAIStep()
         {
             int y;
-            int x; 
+            int x;
             var random = new Random();
-            do {
+            do
+            {
                 x = random.Next(3);
                 y = random.Next(3);
             } while (board[x, y].GetState() != Cell.States.None);
@@ -59,8 +58,8 @@ namespace WinFormsApp1
         }
 
         private void GameButtonClick(object sender, EventArgs e)
-        {   
-            Cell cell = (Cell) sender;
+        {
+            Cell cell = (Cell)sender;
             if (cell.GetState() == Cell.States.None)
             {
                 cell.SetState(Cell.States.X);
@@ -72,7 +71,7 @@ namespace WinFormsApp1
                 winner = CheckWin();
                 if (winner != Cell.States.None)
                 {
-                    var result = MessageBox.Show(winner + " won the game!");
+                    var result = MessageBox.Show(winner + " выеграл!!");
                     if (result == DialogResult.OK) ClearBoard();
                 }
             }
@@ -81,7 +80,7 @@ namespace WinFormsApp1
         private bool CheckNobody()
         {
             byte count = 0;
-            foreach(Cell cell in board)
+            foreach (Cell cell in board)
             {
                 if (cell.GetState() != Cell.States.None)
                 {
@@ -90,7 +89,7 @@ namespace WinFormsApp1
             }
             if (count == 9)
             {
-                var result = MessageBox.Show("Nobody won");
+                var result = MessageBox.Show("Некто не выеграл!!!!");
                 if (result == DialogResult.OK) ClearBoard();
                 return true;
             }
@@ -177,13 +176,14 @@ namespace WinFormsApp1
                 if (count_x == 3 || count_y == 3) return board[i, i].GetState();
             }
 
-//          count_x = 0;
-//          count_y = 0;
-//          for (byte i = 0; i < 3; i++)
-//          {
-//              if (board[i, Math.Abs(i-2)].GetState() != Cell.States.None) count += 1;
-//              if (count == 3) return board[i, i].GetState();
-//          }
+            count_x = 0;
+            count_y = 0;
+            for (sbyte r = 2; r >= 0; r--)
+            {
+                if (board[r, Math.Abs(r - 2)].GetState() == Cell.States.X) count_x += 1;
+                if (board[r, Math.Abs(r - 2)].GetState() == Cell.States.O) count_y += 1;
+                if (count_x == 3 || count_y == 3) return board[r, Math.Abs(r - 2)].GetState();
+            }
             return Cell.States.None;
         }
     }
