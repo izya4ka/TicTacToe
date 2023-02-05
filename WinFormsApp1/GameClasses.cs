@@ -1,4 +1,6 @@
-﻿namespace WinFormsApp1
+﻿using System;
+
+namespace WinFormsApp1
 {
     internal class Cell : Button
     {
@@ -17,7 +19,23 @@
 
         public States GetState() => state;
 
-        public void SetState(States receivedState) => state = receivedState;
+        public void SetState(States receivedState)
+        {
+            state = receivedState;
+
+            switch (receivedState) {
+                case States.None:
+                    Text = " ";
+                    break;
+                case States.X:
+                    Text = "X";
+                    break;
+                case States.O:
+                    Text = "O";
+                    break;
+
+            }
+        }
     }
 
     internal class Board
@@ -27,20 +45,57 @@
             { new Cell(), new Cell(), new Cell() },
             { new Cell(), new Cell(), new Cell() }
         };
-
-        private void GameButtonClick(object sender, EventArgs e)
+        
+        private void DoAIStep()
         {
-            ((Cell)sender).SetState(Cell.States.X);
-            ((Cell)sender).Text = "X";
-            Cell.States winner = CheckWin();
-            if (winner != Cell.States.None)
-            {
-                ClearBoard();
-                MessageBox.Show(winner + " won the game!");
-            }
-
+            int y;
+            int x; 
+            var random = new Random();
+            do {
+                x = random.Next(3);
+                y = random.Next(3);
+            } while (board[x, y].GetState() != Cell.States.None);
+            board[x, y].SetState(Cell.States.O);
         }
 
+        private void GameButtonClick(object sender, EventArgs e)
+        {   
+            Cell cell = (Cell) sender;
+            if (cell.GetState() == Cell.States.None)
+            {
+                cell.SetState(Cell.States.X);
+                Cell.States winner = CheckWin();
+                if (winner == Cell.States.None && !CheckNobody())
+                {
+                    DoAIStep();
+                }
+                winner = CheckWin();
+                if (winner != Cell.States.None)
+                {
+                    var result = MessageBox.Show(winner + " won the game!");
+                    if (result == DialogResult.OK) ClearBoard();
+                }
+            }
+        }
+
+        private bool CheckNobody()
+        {
+            byte count = 0;
+            foreach(Cell cell in board)
+            {
+                if (cell.GetState() != Cell.States.None)
+                {
+                    count += 1;
+                }
+            }
+            if (count == 9)
+            {
+                var result = MessageBox.Show("Nobody won");
+                if (result == DialogResult.OK) ClearBoard();
+                return true;
+            }
+            return false;
+        }
         public Board()
         {
             byte curr_y = 1;
@@ -86,42 +141,50 @@
 
         public Cell.States CheckWin()
         {
-            byte count;
+            byte count_x;
+            byte count_y;
             for (byte y = 0; y < 3; y++)
             {
-                count = 0;
+                count_x = 0;
+                count_y = 0;
                 for (byte x = 0; x < 3; x++)
                 {
-                    if (board[y, x].GetState() != Cell.States.None) count += 1;
-                    if (count == 3) return board[y, x].GetState();
+                    if (board[y, x].GetState() == Cell.States.X) count_x += 1;
+                    if (board[y, x].GetState() == Cell.States.O) count_y += 1;
+                    if (count_x == 3 || count_y == 3) return board[y, x].GetState();
                 }
 
             }
             for (byte x = 0; x < 3; x++)
             {
-                count = 0;
+                count_x = 0;
+                count_y = 0;
                 for (byte y = 0; y < 3; y++)
                 {
-                    if (board[y, x].GetState() != Cell.States.None) count += 1;
-                    if (count == 3) return board[y, x].GetState();
+                    if (board[y, x].GetState() == Cell.States.X) count_x += 1;
+                    if (board[y, x].GetState() == Cell.States.O) count_y += 1;
+                    if (count_x == 3 || count_y == 3) return board[y, x].GetState();
                 }
 
             }
 
-            count = 0;
+            count_x = 0;
+            count_y = 0;
             for (byte i = 0; i < 3; i++)
             {
-                if (board[i, i].GetState() != Cell.States.None) count += 1;
-                if (count == 3) return board[i, i].GetState();
+                if (board[i, i].GetState() == Cell.States.X) count_x += 1;
+                if (board[i, i].GetState() == Cell.States.O) count_y += 1;
+                if (count_x == 3 || count_y == 3) return board[i, i].GetState();
             }
 
-            count = 0;
-            for (byte i = 2; i > 0; i--)
-            {
-                if (board[i, i].GetState() != Cell.States.None) count += 1;
-                if (count == 3) return board[i, i].GetState();
-            }
+//          count_x = 0;
+//          count_y = 0;
+//          for (byte i = 0; i < 3; i++)
+//          {
+//              if (board[i, Math.Abs(i-2)].GetState() != Cell.States.None) count += 1;
+//              if (count == 3) return board[i, i].GetState();
+//          }
             return Cell.States.None;
         }
-    };
+    }
 }
