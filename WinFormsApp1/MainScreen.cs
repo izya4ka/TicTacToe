@@ -1,5 +1,5 @@
 namespace WinFormsApp1
-{   
+{
 
     public partial class TicTacToe : Form
     {
@@ -8,30 +8,42 @@ namespace WinFormsApp1
             InitializeComponent();
         }
 
-        
+        private Board board = new Board();
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            this.BackgroundImage = null;
-            this.startButton.Hide();
-            this.titleLabel.Hide();
-            this.board.Show();
-            this.backButton.Show();
+            BackgroundImage = Resources.fon2;
+            startButton.Hide();
+            titleLabel.Hide();
+            backButton.Show();
+            board.ShowAll();
+            clearButton.Show();
         }
 
         private void TicTacToe_Load(object sender, EventArgs e)
         {
-            this.backButton.Hide();
-            this.board.Hide();
+            backButton.Hide();
+            clearButton.Hide();
+            foreach (Cell cell in board.board)
+            {
+                Controls.Add(cell);
+                cell.Hide();
+            }
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
-            this.BackgroundImage = Resource.Shrek_transparent;
-            this.startButton.Show();
-            this.titleLabel.Show();
-            this.backButton.Hide();
-            this.board.Hide();
+            BackgroundImage = Resources.Shrek_transparent;
+            startButton.Show();
+            titleLabel.Show();
+            backButton.Hide();
+            clearButton.Hide();
+            board.HideAll();
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            board.ClearBoard();
         }
     }
 }
